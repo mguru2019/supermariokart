@@ -7,6 +7,8 @@
 
 #include <avr/io.h>
 #include <util/delay.h>
+#include "car.h"
+#include <stdlib.h>
 
 void Initialize(void) {
 	
@@ -15,10 +17,10 @@ void Initialize(void) {
 	// speed
 	DDRD |= (1<<DDD2);
 	
-	//forwards
+	//backwards
 	DDRD |= (1<<DDD3);
 	
-	//backwards
+	//forwards
 	DDRD |= (1<<DDD4);
 	
 	//ORANGE: FRONT LEFT
@@ -26,10 +28,10 @@ void Initialize(void) {
 	//speed
 	DDRD |= (1<<DDD5);
 	
-	//forwards
+	//backwards
 	DDRD |= (1<<DDD6);
 	
-	//backwards
+	//forwards
 	DDRD |= (1<<DDD7);
 	
 	//WHITE: FRONT RIGHT
@@ -37,10 +39,10 @@ void Initialize(void) {
 	//speed
 	DDRB |= (1<<DDB0);
 	
-	//forwards
+	//backwards
 	DDRB |= (1<<DDB1);
 	
-	//backwards
+	//forwards
 	DDRB |= (1<<DDB2);
 	
 	//GREEN: BACK RIGHT
@@ -48,12 +50,13 @@ void Initialize(void) {
 	//speed
 	DDRB |= (1<<DDB3);
 	
-	//forwards
+	//backwards
 	DDRB |= (1<<DDB4);
 	
-	//backwards
+	//forwards
 	DDRB |= (1<<DDB5);
 }
+
 
 int main(void)
 {
@@ -61,23 +64,32 @@ int main(void)
 	
 	Initialize();
 	
+	tire* back_left;
+	back_left = malloc(sizeof(*back_left));
+	init_tire(back_left, 0, PORTD2, PORTD4, PORTD3);
+	
+	tire* front_left;
+	front_left = malloc(sizeof(*front_left));
+	init_tire(front_left, 0, PORTD5, PORTD7, PORTD6);
+	
+	
+	tire* front_right;
+	front_right = malloc(sizeof(*front_right));
+	init_tire(front_right, 1, PORTB0, PORTB2, PORTB1);
+	
+	tire* back_right;
+	back_right = malloc(sizeof(*back_right));
+	init_tire(back_right, 1, PORTB3, PORTB5, PORTB4);
+	
 	while(1) {
-		PORTD |= (1<<PORTD2);
-		PORTD &= ~(1<<PORTD3);
-		PORTD |= (1<<PORTD4);
 		
-		PORTD |= (1<<PORTD5);
-		PORTD &= ~(1<<PORTD6);
-		PORTD |= (1<<PORTD7);
 		
-		PORTB |= (1<<PORTB0);
-		PORTB &= ~(1<<PORTB1);
-		PORTB |= (1<<PORTB2);
 		
-		PORTB |= (1<<PORTB3);
-		PORTB &= ~(1<<PORTB4);
-		PORTB |= (1<<PORTB5);
-
+			
+		
+		
+		//turn_left(front_right, back_right, front_left, back_left);
+		slide_right(front_right, back_right, front_left, back_left);
 		
 	}
    
