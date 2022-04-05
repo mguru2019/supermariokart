@@ -10,57 +10,75 @@
 
 void Initialize(void) {
 	
-	//speed for front left
-	DDRD |= (1<<DDD0);
+	//BLUE: BACK LEFT
 	
-	//speed for front right
-	DDRD |= (1<<DDD1);
-	
-	//backwards for front right
+	// speed
 	DDRD |= (1<<DDD2);
 	
-	//forwards for front right
+	//forwards
 	DDRD |= (1<<DDD3);
 	
-	//backwards for front left
+	//backwards
 	DDRD |= (1<<DDD4);
 	
-	//forwards for front left
+	//ORANGE: FRONT LEFT
+	
+	//speed
 	DDRD |= (1<<DDD5);
 	
-	//forwards for back right
+	//forwards
 	DDRD |= (1<<DDD6);
 	
-	//backwards for back right
+	//backwards
 	DDRD |= (1<<DDD7);
 	
-	//speed for back right
+	//WHITE: FRONT RIGHT
+	
+	//speed
 	DDRB |= (1<<DDB0);
 	
-	//forwards for back left
+	//forwards
 	DDRB |= (1<<DDB1);
 	
-	//backwards for back left
+	//backwards
 	DDRB |= (1<<DDB2);
 	
-	//speed for back left
+	//GREEN: BACK RIGHT
+	
+	//speed
 	DDRB |= (1<<DDB3);
 	
+	//forwards
+	DDRB |= (1<<DDB4);
 	
+	//backwards
+	DDRB |= (1<<DDB5);
 }
 
 int main(void)
 {
     /* Replace with your application code */
 	
-	//Initialize();
+	Initialize();
 	
-	DDRB |= (1<<DDB5);
-    while (1) 
-    {
+	while(1) {
+		PORTD |= (1<<PORTD2);
+		PORTD &= ~(1<<PORTD3);
+		PORTD |= (1<<PORTD4);
+		
+		PORTD |= (1<<PORTD5);
+		PORTD &= ~(1<<PORTD6);
+		PORTD |= (1<<PORTD7);
+		
+		PORTB |= (1<<PORTB0);
+		PORTB &= ~(1<<PORTB1);
+		PORTB |= (1<<PORTB2);
+		
+		PORTB |= (1<<PORTB3);
+		PORTB &= ~(1<<PORTB4);
 		PORTB |= (1<<PORTB5);
-		_delay_ms(1000);
-		PORTB &= ~(1<<PORTB5);
-    }
-}
 
+		
+	}
+   
+}
