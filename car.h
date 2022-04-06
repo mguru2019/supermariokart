@@ -9,7 +9,10 @@
 #ifndef CAR_H_
 #define CAR_H_
 
+#define F_CPU 16000000UL
+
 #include <avr/io.h>
+#include <util/delay.h>
 
 typedef struct tire_tag {
 	uint8_t speed;
@@ -21,9 +24,11 @@ typedef struct tire_tag {
 void init_tire(tire* t, int is_right, uint8_t speed_pin, uint8_t forwards_pin, uint8_t backwards_pin);
 void move_tire_backwards(tire* t);
 void move_tire_forwards(tire* t);
+void move_car_forwards(tire* fr, tire* br, tire* fl, tire* bl);
 void stop_tire(tire* t);
-void turn_right(tire* fr, tire* br, tire* fl, tire* bl);
 void slide_right(tire* fr, tire* br, tire* fl, tire* bl);
+void turn_right(tire* fr, tire* br, tire* fl, tire* bl);
+void slide_left(tire* fr, tire* br, tire* fl, tire* bl);
 void turn_left(tire* fr, tire* br, tire* fl, tire* bl);
 void spin(tire* fr, tire* br, tire* fl, tire* bl);
 void speed_up(tire* fr, tire* br, tire* fl, tire* bl);

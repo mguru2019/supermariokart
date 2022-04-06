@@ -4,11 +4,19 @@
  * Created: 4/4/2022 5:38:27 PM
  * Author : mayaguru
  */ 
+#define F_CPU 16000000UL
+#define BAUD_RATE 9600
+#define BAUD_PRESCALER ((F_CPU / (BAUD_RATE * 16UL)) - 1)
 
 #include <avr/io.h>
 #include <util/delay.h>
 #include "car.h"
 #include <stdlib.h>
+#include "uart.h"
+#include <stdio.h>
+
+char String[25];
+
 
 void Initialize(void) {
 	
@@ -55,6 +63,16 @@ void Initialize(void) {
 	
 	//forwards
 	DDRB |= (1<<DDB5);
+	
+	// Turn Left
+	DDRC &= ~(1<<DDC5);
+	
+	//Turn Right
+	DDRC &= ~(1<<DDC4);
+	
+	// Move Forward
+	DDRC &= ~(1<<DDC3);
+	
 }
 
 
@@ -63,6 +81,7 @@ int main(void)
     /* Replace with your application code */
 	
 	Initialize();
+	UART_init(BAUD_PRESCALER);
 	
 	tire* back_left;
 	back_left = malloc(sizeof(*back_left));
@@ -83,13 +102,18 @@ int main(void)
 	
 	while(1) {
 		
-		
-		
-			
-		
-		
-		//turn_left(front_right, back_right, front_left, back_left);
-		slide_right(front_right, back_right, front_left, back_left);
+		if (PINC & (1<<PINC5)) {
+			turn_left(front_right, back_right, front_left, back_left);
+		}
+		if (PINC & (1<<PINC4)) {
+			turn_right(front_right, back_right, front_left, back_left);
+		}
+		if (PINC & (1<<PINC3)) {
+			move_car_forwards(front_right, back_right, front_left, back_left);
+		}
+		else {
+			stop(front_right, back_right, front_left, back_left);
+		}
 		
 	}
    
