@@ -11,6 +11,7 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "car.h"
+#include "item.h"
 #include <stdlib.h>
 #include "uart.h"
 #include <stdio.h>
@@ -102,19 +103,29 @@ int main(void)
 	
 	while(1) {
 		
-		if (PINC & (1<<PINC5)) {
+		if (PINC & (1<<PINC5) && PINC & (1<<PINC3)) {
 			turn_left(front_right, back_right, front_left, back_left);
 		}
-		if (PINC & (1<<PINC4)) {
+		else if (PINC & (1<<PINC4) && PINC & (1<<PINC3)) {
 			turn_right(front_right, back_right, front_left, back_left);
 		}
-		if (PINC & (1<<PINC3)) {
+		else if (PINC & (1<<PINC3)) {
 			move_car_forwards(front_right, back_right, front_left, back_left);
+		}
+		else if (PINC & (1<<PINC5) && ~(PINC & (1<<PINC3)) ) {
+			slide_left(front_right, back_right, front_left, back_left);
+		}
+		else if (PINC & (1<<PINC4) && ~(PINC & (1<<PINC3))) {
+			slide_right(front_right, back_right, front_left, back_left);
 		}
 		else {
 			stop(front_right, back_right, front_left, back_left);
 		}
 		
+		
+		int item = choose_item(0);
+		sprintf(String, "Item was %d \n", item);
+		UART_putstring(String);
 	}
    
 }
