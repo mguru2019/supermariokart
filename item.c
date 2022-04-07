@@ -7,18 +7,19 @@
 
 #include "item.h"
 
-int choose_item(int adc) {
-	//case on adc value
-	/*
+int has_item = 0;
+
+int choose_item(void) {
+	
 	if (!has_item) {
 		int item = rand() % 9 + 1;
 		has_item = 1;
 		return item;
 	}
 	return 0;
-	*/
-	
-	int item = rand() % 9 + 1;
-	has_item = 1;
-	return item;
+
+}
+
+void deploy_item(int item) {
+	has_item = 0;
 }

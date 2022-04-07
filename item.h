@@ -21,9 +21,8 @@
 #define POW 8
 #define BLUESHELL 9
 
-int has_item;
 
-int choose_item(int adc);
+int choose_item(void);
 void deploy_item(int item);
 
 
