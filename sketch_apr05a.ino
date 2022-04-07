@@ -87,6 +87,15 @@ BLYNK_WRITE(V0) {
   }
  }
 
+BLYNK_WRITE(V1) {
+  if (param.asInt() == 1) {
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D3, LOW);
+  }
+}
+
 void setup()
 {
   // Debug console
@@ -94,6 +103,7 @@ void setup()
   pinMode(D0, OUTPUT);
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
+  pinMode(D3, OUTPUT);
   Blynk.begin(auth, ssid, pass);
 }
 
