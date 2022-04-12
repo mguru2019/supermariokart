@@ -254,17 +254,29 @@ int main(void)
 			//turn_right(front_right, back_right, front_left, back_left);
 			veer_right(front_right, back_right, front_left, back_left);
 		}
+		else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
+			init_dc();
+			slide_right(front_right, back_right, front_left, back_left);
+		}
+		else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
+			init_dc();
+			slide_left(front_right, back_right, front_left, back_left);
+		}
 		else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
+			init_dc();
 			turn_left(front_right, back_right, front_left, back_left);
 		}
 		else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
+			init_dc();
 			turn_right(front_right, back_right, front_left, back_left);
 		}
+		
 		else if (PINF & (1<<PINF3)) {
-			move_car_forwards(front_right, back_right, front_left, back_left);
 			init_dc();
+			move_car_forwards(front_right, back_right, front_left, back_left);
 		}
 		else {
+			init_dc();
 			stop(front_right, back_right, front_left, back_left);
 		}
 		
@@ -297,7 +309,7 @@ int main(void)
 		pwm(0,x);
 		pwm(1,y);
 		pwm(2,z);
-		_delay_ms(1000);
+	//	_delay_ms(1000);
 	}
    
 }
