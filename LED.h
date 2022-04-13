@@ -9,14 +9,17 @@
 #ifndef LED_H_
 #define LED_H_
 
+#include <stdlib.h>
 #define F_CPU 16000000UL
 #define RAND_MAX 255
 #include <avr/io.h>
 #include <util/delay.h>
-#include <stdlib.h>
+
 
 void init_led();
 void pwm(int pin,int num);
+void random_pwm();
+void led_off();
 
 
 
