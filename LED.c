@@ -30,23 +30,42 @@ void init_led() {
 }
 void pwm(int pin,int num){
 	switch(pin){
-		case 0:	
+		case 0:	//RED
 		PORTH |= (1<<PH3);
 		PORTH &= ~(1<<PH4);
 		PORTH &= ~(1<<PH5);
 		OCR4A=num;
 		break;
-		case 1:
+		case 1: //GREEN
 		PORTH |= (1<<PH4);
 		PORTH &= ~(1<<PH3);
 		PORTH &= ~(1<<PH5);
 		OCR4B=num;
 		break;
-		case 2:
+		case 2: //BLUE
 		PORTH |= (1<<PH5);
 		PORTH &= ~(1<<PH3);
 		PORTH &= ~(1<<PH4);
 		OCR4C=num;
 		break;
 	}
+}
+
+void random_pwm() {
+	for (int i = 0; i <= 5; i++) {
+		int red = rand() % RAND_MAX;
+		int green = rand() % RAND_MAX;
+		int blue = rand() % RAND_MAX;
+		
+		pwm(0,red);
+		pwm(1,green);
+		pwm(2,blue);
+		_delay_ms(500);
+	}
+}
+
+void led_off() {
+	PORTH &= ~(1<<PH5);
+	PORTH &= ~(1<<PH3);
+	PORTH &= ~(1<<PH4);
 }
