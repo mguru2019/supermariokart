@@ -108,7 +108,6 @@ BLYNK_WRITE(V1) {
   }
 }
 BLYNK_WRITE(V2) { // Mario
-  if (game_state == 0) {
     if (param.asInt() == 1) {
       digitalWrite(D0, HIGH);
       game_state = 1;
@@ -117,12 +116,8 @@ BLYNK_WRITE(V2) { // Mario
     else {
       digitalWrite(D0, LOW);
     }
-  }
-  else {
-    digitalWrite(D0, LOW);
-  } 
 }
-/*
+
 BLYNK_WRITE(V3) { // Luigi
   if (param.asInt() == 1) {
     digitalWrite(D1, HIGH);
@@ -258,7 +253,7 @@ BLYNK_WRITE(V12) { // Random
     digitalWrite(D3, LOW);
   }
 }
-*/
+
 void setup()
 {
   // Debug console
