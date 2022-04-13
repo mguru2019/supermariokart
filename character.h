@@ -20,5 +20,10 @@
 #define TOAD 9
 #define DONKEYKONG 10
 
-void choose_character();
 void light_led(int character);
+int choose_character();
+
+
+
+
+#endif /* CHARACTER_H_ */
