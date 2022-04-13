@@ -25,13 +25,4 @@
 int choose_item(void);
 void deploy_item(int item);
 
-
-
-
-
-
-
-
-
-
 #endif /* ITEM_H_ */
