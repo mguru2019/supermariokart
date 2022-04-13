@@ -95,7 +95,115 @@ BLYNK_WRITE(V1) {
     digitalWrite(D3, LOW);
   }
 }
+BLYNK_WRITE(V2) { // Mario
+  if (param.asInt() == 1) {
+    digitalWrite(D0, HIGH);
+  }
+  else {
+    digitalWrite(D0, LOW);
+  }
+}
 
+BLYNK_WRITE(V3) { // Luigi
+  if (param.asInt() == 1) {
+    digitalWrite(D1, HIGH);
+  }
+  else {
+    digitalWrite(D1, LOW);
+  }
+}
+
+BLYNK_WRITE(V4) { // Waluigi
+  if (param.asInt() == 1) {
+    digitalWrite(D2, HIGH);
+  }
+  else {
+    digitalWrite(D2, LOW);
+  }
+}
+
+BLYNK_WRITE(V5) { // Wario
+  if (param.asInt() == 1) {
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D3, LOW);
+  }
+}
+
+BLYNK_WRITE(V6) { // Peach
+  if (param.asInt() == 1) {
+    digitalWrite(D0, HIGH);
+    digitalWrite(D1, HIGH);
+  }
+  else {
+    digitalWrite(D0, LOW);
+    digitalWrite(D1, LOW);
+  }
+}
+
+BLYNK_WRITE(V7) { // Bowswer
+  if (param.asInt() == 1) {
+    digitalWrite(D0, HIGH);
+    digitalWrite(D2, HIGH);
+  }
+  else {
+    digitalWrite(D0, LOW);
+    digitalWrite(D2, LOW);  }
+}
+
+BLYNK_WRITE(V8) { // Yoshi
+  if (param.asInt() == 1) {
+    digitalWrite(D0, HIGH);
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D0, LOW);
+    digitalWrite(D3, LOW);
+  }
+}
+
+BLYNK_WRITE(V9) { // Daisy
+  if (param.asInt() == 1) {
+    digitalWrite(D1, HIGH);
+    digitalWrite(D2, HIGH);
+  }
+  else {
+    digitalWrite(D1, LOW);
+    digitalWrite(D2, LOW);
+  }
+}
+
+BLYNK_WRITE(V10) { // Toad
+  if (param.asInt() == 1) {
+    digitalWrite(D1, HIGH);
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D1, LOW);
+    digitalWrite(D3, LOW);
+  }
+}
+
+BLYNK_WRITE(V11) { // Donkey Kong
+  if (param.asInt() == 1) {
+    digitalWrite(D2, HIGH);
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D2, LOW);
+    digitalWrite(D3, LOW);
+  }
+}
+
+BLYNK_WRITE(V12) { // Random
+  if (param.asInt() == 1) {
+    digitalWrite(D0, HIGH);
+  }
+  else {
+    digitalWrite(D0, LOW);
+  }
+}
 void setup()
 {
   // Debug console
