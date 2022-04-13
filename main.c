@@ -20,6 +20,7 @@
 #include "uart.h"
 #include <stdio.h>
 #include "LED.h"
+#include "character.h"
 
 char String[25];
 int flag = 0;
@@ -30,6 +31,8 @@ tire* back_left;
 tire* back_right;
 tire* front_left;
 tire* front_right;
+
+int user_character = 0;
 
 
 void Initialize(void) {
@@ -195,6 +198,7 @@ void Initialize(void) {
 	
 	init_led();
 	
+	user_character = 0;
 	sei();
 	
 }
@@ -235,51 +239,52 @@ int main(void)
 	init_tire(back_right, 1, PB5, PL3, PL2, 0);
 	
 	int item = 0;
-	
-	
+	user_character = 1;//choose_character();
 	while(1) {
+		sprintf(String, "Character is: %d \n", user_character);
+		UART_putstring(String);
+		light_led(user_character);
 		
-		
-		if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && PINF & (1<<PINF2)) {
-			slide_right(front_right, back_right, front_left, back_left);
+		if(user_character != 0) { 
+			if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && PINF & (1<<PINF2)) {
+				slide_right(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF4) && PINF & (1<<PINF3) && PINF & (1<<PINF2))  {
+				slide_left(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
+				//turn_left(front_right, back_right, front_left, back_left);
+				veer_left(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF4) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
+				//turn_right(front_right, back_right, front_left, back_left);
+				veer_right(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
+				init_dc();
+				slide_right(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
+				init_dc();
+				slide_left(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
+				init_dc();
+				turn_left(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
+				init_dc();
+				turn_right(front_right, back_right, front_left, back_left);
+			}
+			else if (PINF & (1<<PINF3)) {
+				init_dc();
+				move_car_forwards(front_right, back_right, front_left, back_left);
+			}
+			else {
+				init_dc();
+				stop(front_right, back_right, front_left, back_left);
+			}
 		}
-		else if (PINF & (1<<PINF4) && PINF & (1<<PINF3) && PINF & (1<<PINF2))  {
-			slide_left(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
-			//turn_left(front_right, back_right, front_left, back_left);
-			veer_left(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF4) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
-			//turn_right(front_right, back_right, front_left, back_left);
-			veer_right(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
-			init_dc();
-			slide_right(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
-			init_dc();
-			slide_left(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
-			init_dc();
-			turn_left(front_right, back_right, front_left, back_left);
-		}
-		else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
-			init_dc();
-			turn_right(front_right, back_right, front_left, back_left);
-		}
-		
-		else if (PINF & (1<<PINF3)) {
-			init_dc();
-			move_car_forwards(front_right, back_right, front_left, back_left);
-		}
-		else {
-			init_dc();
-			stop(front_right, back_right, front_left, back_left);
-		}
-		
 		/*
 		if (ADC > 900) {
 			duty_cycle = 100;
@@ -303,13 +308,16 @@ int main(void)
 		_delay_ms(2000);
 		slow_down(front_right,back_right,front_left,back_left);
 */
-		int x=255; // RED
-		int y=255; // GREEN
-		int z=255; // BLUE
-		pwm(0,x);
-		pwm(1,y);
-		pwm(2,z);
+		//int red=255; // RED
+		//int green=255; // GREEN
+		//int blue=255; // BLUE
+		//pwm(0,red);
+		//pwm(1,green);
+		//pwm(2,blue);
+		
 	//	_delay_ms(1000);
-	}
-   
+	} 
+		
+		//choose_character(MARIO);
+	//	}
 }
