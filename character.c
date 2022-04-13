@@ -79,6 +79,7 @@ void light_led(int character) {
 }
 
 int choose_character() {
+	int character = 0;
 	if (PINF & (1<<PINF2) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
 		character = DONKEYKONG;
 	}
@@ -109,7 +110,7 @@ int choose_character() {
 	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
 		character = MARIO;
 	}
-	else if (PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5)){
+	else if ((PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))){
 		character = rand() % 10 + 1;
 	}
 	else {
