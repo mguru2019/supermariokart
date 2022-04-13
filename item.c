@@ -49,15 +49,15 @@ void deploy_item(int item) {
 		_delay_ms(1000);
 		slow_down(front_right,back_right,front_left,back_left);
 	}
-	if (item == BANANA) {
+	else if (item == BANANA) {
 		spin(front_right,back_right,front_left,back_left);
 	}
-	if (item == STAR) {
+/*	else if (item == STAR) {
 		speed_up(front_right,back_right,front_left,back_left);
 		random_pwm();
 		_delay_ms(5000);
 		slow_down(front_right,back_right,front_left,back_left);
-		light_led(character)
-	}
+		light_led(character); 
+	} */
 	has_item = 0;
 }
