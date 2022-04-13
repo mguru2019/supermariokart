@@ -7,10 +7,6 @@
 #include "character.h"
 #include "LED.h"
 
-void choose_character() {
-	
-}
-
 void light_led(int character) {
 	init_led();
 	int red = 0;
@@ -76,8 +72,49 @@ void light_led(int character) {
 		green=75; // GREEN
 		blue=0; // BLUE
 	}
-		
+	
 	pwm(0,red);
 	pwm(1,green);
 	pwm(2,blue);
+}
+
+int choose_character() {
+	if (PINF & (1<<PINF2) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = DONKEYKONG;
+	}
+	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+		character = TOAD;
+	}
+	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+		character = DAISY;
+	}
+	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = YOSHI;
+	}
+	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = BOWSER;
+	}
+	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+		character = PEACH;
+	}
+	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = WARIO;
+	}
+	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = WALUIGI;
+	}
+	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+		character = LUIGI;
+	}
+	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+		character = MARIO;
+	}
+	else if (PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5)){
+		character = rand() % 10 + 1;
+	}
+	else {
+		character = 0;
+		led_off();
+	}
+	return character;
 }
