@@ -32,13 +32,12 @@ tire* back_right;
 tire* front_left;
 tire* front_right;
 
-int user_character = 0;
-
-
 void Initialize(void) {
 	
 	cli();
 	
+	init_state();
+	has_item = 0;
 	//BLUE: BACK LEFT
 	
 	// backwards
@@ -239,13 +238,23 @@ int main(void)
 	init_tire(back_right, 1, PB5, PL3, PL2, 0);
 	
 	int item = 0;
-	user_character = 1;//choose_character();
+	//user_character = choose_character();
 	while(1) {
-		sprintf(String, "Character is: %d \n", user_character);
-		UART_putstring(String);
-		light_led(user_character);
+		if (game_state == 0) { 
+		choose_character();	
+		light_led(selected_character);
+		character_locked(front_right, back_right, front_left, back_left);
+		} 
 		
-		if(user_character != 0) { 
+		else if (game_state == 1) { 
+			light_led(user_character);
+			
+			if (ADC > 900 && has_item == 0) {
+				item = choose_item();
+				deploy_item(item, front_right, back_right, front_left, back_left);
+				
+			}
+			
 			if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && PINF & (1<<PINF2)) {
 				slide_right(front_right, back_right, front_left, back_left);
 			}
@@ -253,11 +262,9 @@ int main(void)
 				slide_left(front_right, back_right, front_left, back_left);
 			}
 			else if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
-				//turn_left(front_right, back_right, front_left, back_left);
 				veer_left(front_right, back_right, front_left, back_left);
 			}
 			else if (PINF & (1<<PINF4) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF2))) {
-				//turn_right(front_right, back_right, front_left, back_left);
 				veer_right(front_right, back_right, front_left, back_left);
 			}
 			else if (PINF & (1<<PINF4) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF2))) {
@@ -269,6 +276,8 @@ int main(void)
 				slide_left(front_right, back_right, front_left, back_left);
 			}
 			else if (PINF & (1<<PINF5) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF2))) {
+				sprintf(String, "Got Here: %d \n", selected_character);
+				UART_putstring(String);
 				init_dc();
 				turn_left(front_right, back_right, front_left, back_left);
 			}
@@ -285,21 +294,12 @@ int main(void)
 				stop(front_right, back_right, front_left, back_left);
 			}
 		}
-		/*
-		if (ADC > 900) {
-			duty_cycle = 100;
-			
-			item = choose_item();
-			sprintf(String, "item was %d \n", item);
-			UART_putstring(String);
-			deploy_item(item);
+	} 
 		
-		} 
 		
-		sprintf(String, "ADC was %d\n", ADC);
-		UART_putstring(String);
+
 		
-		*/
+		
 		
 		/*
 		move_car_forwards(front_right,back_right,front_left,back_left);		
@@ -315,8 +315,7 @@ int main(void)
 		//pwm(1,green);
 		//pwm(2,blue);
 		
-	//	_delay_ms(1000);
-	} 
+	//	_delay_ms(1000); 
 		
 		//choose_character(MARIO);
 	//	}
