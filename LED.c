@@ -52,16 +52,14 @@ void pwm(int pin,int num){
 }
 
 void random_pwm() {
-	for (int i = 0; i <= 5; i++) {
-		int red = rand() % RAND_MAX;
-		int green = rand() % RAND_MAX;
-		int blue = rand() % RAND_MAX;
-		
-		pwm(0,red);
-		pwm(1,green);
-		pwm(2,blue);
-		_delay_ms(500);
-	}
+	int red = rand();
+	int green = rand();
+	int blue = rand();
+	
+	pwm(0,red);
+	pwm(1,green);
+	pwm(2,blue);
+	
 }
 
 void led_off() {
