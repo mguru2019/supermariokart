@@ -9,6 +9,8 @@
 #ifndef CHARACTER_H_
 #define CHARACTER_H_
 
+#include "car.h"
+
 #define MARIO 1
 #define LUIGI 2
 #define WALUIGI 3
@@ -20,8 +22,15 @@
 #define TOAD 9
 #define DONKEYKONG 10
 
+int game_state;
+int selected_character;
+int user_character;
+
+void init_state();
 void light_led(int character);
-int choose_character();
+void choose_character();
+void character_locked(tire* fr, tire* br, tire* fl, tire* bl);
+
 
 
 
