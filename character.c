@@ -7,6 +7,12 @@
 #include "character.h"
 #include "LED.h"
 
+void init_state() {
+	game_state = 0;
+	user_character = 0;
+	selected_character = 0;
+}
+
 void light_led(int character) {
 	init_led();
 	int red = 0;
@@ -39,26 +45,26 @@ void light_led(int character) {
 	
 	else if (character == PEACH) { //PINK
 		red=255; // RED
-		green=102; // GREEN
-		blue=255; // BLUE
+		green=0; // GREEN
+		blue=107; // BLUE
 	}
 	
 	else if (character == BOWSER) { //ORANGE
 		red=255; // RED
-		green=165; // GREEN
+		green=51; // GREEN
 		blue=0; // BLUE
 	}
 	
 	else if (character == YOSHI) { //LIGHT GREEN
-		red=244; // RED
-		green=238; // GREEN
-		blue=144; // BLUE
+		red=102; // RED
+		green=204; // GREEN
+		blue=0; // BLUE
 	}
 	
 	else if (character == DAISY) { //LIGHT PURPLE
-		red=203; // RED
-		green=195; // GREEN
-		blue=227; // BLUE
+		red=204; // RED
+		green=153; // GREEN
+		blue=255; // BLUE
 	}
 	
 	else if (character == TOAD) { //BLUE
@@ -68,8 +74,8 @@ void light_led(int character) {
 	}
 	
 	else if (character == DONKEYKONG) { //BROWN
-		red=150; // RED
-		green=75; // GREEN
+		red=102; // RED
+		green=51; // GREEN
 		blue=0; // BLUE
 	}
 	
@@ -78,44 +84,51 @@ void light_led(int character) {
 	pwm(2,blue);
 }
 
-int choose_character() {
-	int character = 0;
-	if (PINF & (1<<PINF2) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = DONKEYKONG;
+void choose_character() {
+	if (game_state == 0) {		
+		if (PINF & (1<<PINF2) && PINF & (1<<PINF3) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = DONKEYKONG;
+		}
+		else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+			selected_character = TOAD;
+		}
+		else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+			selected_character = DAISY;
+		}
+		else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = YOSHI;
+		}
+		else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = BOWSER;
+		}
+		else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+			selected_character = PEACH;
+		}
+		else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = WARIO;
+		}
+		else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = WALUIGI;
+		}
+		else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
+			selected_character = LUIGI;
+		}
+		else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
+			selected_character = MARIO;
+		}
+		else if ((PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))){
+			selected_character = rand() % 10 + 1;
+		}
+		else {
+			selected_character = 0;
+			led_off();
+		}
 	}
-	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
-		character = TOAD;
+}
+
+void character_locked(tire* fr, tire* br, tire* fl, tire* bl) {
+	if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {		
+		user_character = selected_character;
+		game_state = 1;
 	}
-	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
-		character = DAISY;
-	}
-	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = YOSHI;
-	}
-	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = BOWSER;
-	}
-	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
-		character = PEACH;
-	}
-	else if ((PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = WARIO;
-	}
-	else if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = WALUIGI;
-	}
-	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && ~(PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {
-		character = LUIGI;
-	}
-	else if (~(PINF & (1<<PINF2)) && ~(PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && ~(PINF & (1<<PINF5))) {
-		character = MARIO;
-	}
-	else if ((PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))){
-		character = rand() % 10 + 1;
-	}
-	else {
-		character = 0;
-		led_off();
-	}
-	return character;
 }
