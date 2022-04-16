@@ -100,10 +100,10 @@ void Initialize(void) {
 	init_dc();
 	
 	//PHOTORESISTOR
-	
-	
+	DDRA &= ~(1<<DDA7);
+	item = 0;
 	PRR0 &= ~(1<<PRADC);
-	
+	DDRE |= (1<<DDE4);
 	
 	//Select the reference voltage as AVcc
 	ADMUX |= (1<<REFS0);
@@ -171,11 +171,15 @@ void Initialize(void) {
 	TCCR3A |= (1<<COM3A1);
 	TCCR3A &= ~(1<<COM3A0);
 	
+	TCCR3A |= (1<<COM3B1);
+	TCCR3A &= ~(1<<COM3B0);
+	
 	TCCR3A |= (1<<COM3C1);
 	TCCR3A &= ~(1<<COM3C0);
 		
 	OCR3A = (dc_fl/100) * 255;
 	OCR3C = (dc_bl/100) * 255;
+	OCR3B = (dc_item/100) * 255;
 	
 	TIMSK3 |= (1<<TOIE3);
 	
@@ -205,6 +209,7 @@ void Initialize(void) {
 ISR(TIMER3_OVF_vect) {
 	OCR3A = (dc_fl/100) * 255;
 	OCR3C = (dc_bl/100) * 255;
+	OCR3B = (dc_item/100) * 255;
 }
 
 ISR(TIMER1_OVF_vect) {
@@ -219,7 +224,7 @@ ISR(TIMER2_OVF_vect) {
 int main(void)
 {
     /* Replace with your application code */
-	
+	srand(time(NULL));
 	Initialize();
 	UART_init(BAUD_PRESCALER);
 	
@@ -237,9 +242,9 @@ int main(void)
 	back_right = malloc(sizeof(*back_right));
 	init_tire(back_right, 1, PB5, PL3, PL2, 0);
 	
-	int item = 0;
 	//user_character = choose_character();
 	while(1) {
+		
 		if (game_state == 0) { 
 		choose_character();	
 		light_led(selected_character);
@@ -251,9 +256,15 @@ int main(void)
 			
 			if (ADC > 900 && has_item == 0) {
 				item = choose_item();
-				deploy_item(item, front_right, back_right, front_left, back_left);
-				
+				sprintf(String, "Item is: %d \n", item);
+				UART_putstring(String);							
 			}
+			if (PINA & (1<<PINA7)) {
+				sprintf(String, "In conditional \n");
+				UART_putstring(String);
+				deploy_item(item, front_right, back_right, front_left, back_left);
+			}
+			
 			
 			if (PINF & (1<<PINF5) && PINF & (1<<PINF3) && PINF & (1<<PINF2)) {
 				slide_right(front_right, back_right, front_left, back_left);
@@ -295,28 +306,4 @@ int main(void)
 			}
 		}
 	} 
-		
-		
-
-		
-		
-		
-		/*
-		move_car_forwards(front_right,back_right,front_left,back_left);		
-		_delay_ms(2000);
-		speed_up(front_right,back_right,front_left,back_left);
-		_delay_ms(2000);
-		slow_down(front_right,back_right,front_left,back_left);
-*/
-		//int red=255; // RED
-		//int green=255; // GREEN
-		//int blue=255; // BLUE
-		//pwm(0,red);
-		//pwm(1,green);
-		//pwm(2,blue);
-		
-	//	_delay_ms(1000); 
-		
-		//choose_character(MARIO);
-	//	}
 }
