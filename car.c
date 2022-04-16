@@ -7,10 +7,10 @@
 #include "car.h"
 
 void init_dc() {
-	dc_fr = 50;
-	dc_fl = 50;
-	dc_br = 50;
-	dc_bl = 50;
+	dc_fr = 70;
+	dc_fl = 70;
+	dc_br = 70;
+	dc_bl = 70;
 }
 void init_tire(tire* t, int is_right, uint8_t speed_pin, uint8_t forwards_pin, uint8_t backwards_pin, double dc) {
 	t->speed = speed_pin;
@@ -111,16 +111,16 @@ void spin(tire* fr, tire* br, tire* fl, tire* bl) {
 
 void speed_up_tire(tire* t) {
 	if (t->speed == PE3) {
-		dc_fl += 30;
+		dc_fl += 20;
 	}
 	if (t->speed == PB4) {
-		dc_fr += 30;
+		dc_fr += 20;
 	}
 	if (t->speed == PE5) {
-		dc_bl += 30;
+		dc_bl += 20;
 	}
 	if (t->speed == PB5) {
-		dc_br += 30;
+		dc_br += 20;
 	}
 	
 	if (dc_br > 100) {
@@ -140,16 +140,16 @@ void speed_up_tire(tire* t) {
 }
 void slow_down_tire(tire* t) {
 		if (t->speed == PE3 && dc_fl > 20) {
-			dc_fl -= 30;
+			dc_fl -= 20;
 		}
 		if (t->speed == PB4 && dc_fr > 20) {
-			dc_fr -= 30;
+			dc_fr -= 20;
 		}
 		if (t->speed == PE5 && dc_bl > 20) {
-			dc_bl -= 30;
+			dc_bl -= 20;
 		}
 		if (t->speed == PB5 && dc_br > 20) {
-			dc_br -= 30;
+			dc_br -= 20;
 		}
 		
 		if (dc_br < 10) {

@@ -1,3 +1,4 @@
+/*
  * item.h
  *
  * Created: 4/6/2022 2:39:38 PM
@@ -23,7 +24,9 @@
 #define POW 8
 #define BLUESHELL 9
 
+double dc_item;
 int has_item;
+int item;
 
 int choose_item(void);
 void deploy_item(int item, tire* fr, tire* br, tire* fl, tire* bl);

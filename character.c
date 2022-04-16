@@ -11,6 +11,7 @@ void init_state() {
 	game_state = 0;
 	user_character = 0;
 	selected_character = 0;
+	DDRA &= ~(1<<DDA6);
 }
 
 void light_led(int character) {
@@ -127,8 +128,9 @@ void choose_character() {
 }
 
 void character_locked(tire* fr, tire* br, tire* fl, tire* bl) {
-	if (~(PINF & (1<<PINF2)) && (PINF & (1<<PINF3)) && (PINF & (1<<PINF4)) && (PINF & (1<<PINF5))) {		
+	if (PINA & (1<<PINA6)) {		
 		user_character = selected_character;
 		game_state = 1;
 	}
 }
+
