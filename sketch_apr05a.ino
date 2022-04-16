@@ -43,6 +43,8 @@
 
 #include <ESP8266WiFi.h>
 #include <BlynkSimpleEsp8266.h>
+#include <stdio.h>
+//#include <SimpleTimer.h>
 
 // You should get Auth Token in the Blynk App.
 // Go to the Project Settings (nut icon).
@@ -54,6 +56,21 @@ char ssid[] = "AirPennNet-Device";
 char pass[] = "penn1740wifi";
 
 int game_state = 0;
+
+//SimpleTimer timer;
+int val = 0;
+
+int high_total = 0;
+int total = 0;
+int start_seq = 0;
+int wave_counter = 0;
+
+char item[25];
+char item_label[6] = "Item:";
+int starting_place = 0;
+
+WidgetLCD lcd(V15);
+
 // This function is called every time the device is connected to the Blynk.Cloud
 BLYNK_CONNECTED()
 {
@@ -63,55 +80,9 @@ BLYNK_CONNECTED()
   Blynk.setProperty(V3, "url", "https://docs.blynk.io/en/getting-started/what-do-i-need-to-blynk/how-quickstart-device-was-made");
 }
 
-BLYNK_WRITE(V0) {
-  if (game_state == 1) {
-    int x = param[0].asInt();
-    int y = param[1].asInt();
-    if (x <= 75) {
-      digitalWrite(D0, HIGH);
-      digitalWrite(D1,LOW);
-    }
-    else if (x >= 175) {
-      digitalWrite(D1, HIGH);
-      digitalWrite(D0,LOW);
-    }
-    else {
-      digitalWrite(D1, LOW);
-      digitalWrite(D0,LOW);
-    }
-  
-    if (y >= 150) {
-      digitalWrite(D2, HIGH);
-    }
-    else {
-      digitalWrite(D2, LOW);
-    }
-  }
-  else {
-     digitalWrite(D1, LOW);
-     digitalWrite(D0,LOW);
-     digitalWrite(D2, LOW);
-  }
-}
-
-BLYNK_WRITE(V1) {
-  if (game_state == 1) {
-    if (param.asInt() == 1) {
-      digitalWrite(D3, HIGH);
-    }
-    else {
-      digitalWrite(D3, LOW);
-    }
-  }
-  else {
-    digitalWrite(D3, LOW);
-  }
-}
 BLYNK_WRITE(V2) { // Mario
-    if (param.asInt() == 1) {
+    if (param.asInt() == 1 && game_state == 0) {
       digitalWrite(D0, HIGH);
-      game_state = 1;
-      digitalWrite(D0, LOW);
     }
     else {
       digitalWrite(D0, LOW);
@@ -119,10 +90,8 @@ BLYNK_WRITE(V2) { // Mario
 }
 
 BLYNK_WRITE(V3) { // Luigi
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D1, HIGH);
-    game_state = 1;
-    digitalWrite(D1, LOW);
   }
   else {
     digitalWrite(D1, LOW);
@@ -130,10 +99,8 @@ BLYNK_WRITE(V3) { // Luigi
 }
 
 BLYNK_WRITE(V4) { // Waluigi
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D2, HIGH);
-    game_state = 1;
-    digitalWrite(D2, LOW);
   }
   else {
     digitalWrite(D2, LOW);
@@ -141,23 +108,19 @@ BLYNK_WRITE(V4) { // Waluigi
 }
 
 BLYNK_WRITE(V5) { // Wario
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D3, HIGH);
-    game_state = 1;
-    digitalWrite(D3, LOW);
   }
+  
   else {
     digitalWrite(D3, LOW);
   }
 }
 
 BLYNK_WRITE(V6) { // Peach
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D0, HIGH);
     digitalWrite(D1, HIGH);
-    game_state = 1;
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
   }
   else {
     digitalWrite(D0, LOW);
@@ -166,25 +129,21 @@ BLYNK_WRITE(V6) { // Peach
 }
 
 BLYNK_WRITE(V7) { // Bowswer
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D0, HIGH);
     digitalWrite(D2, HIGH);
-    game_state = 1;
-    digitalWrite(D0, LOW);
-    digitalWrite(D2, LOW);
   }
   else {
     digitalWrite(D0, LOW);
-    digitalWrite(D2, LOW);  }
+    digitalWrite(D2, LOW);  
+    }
 }
 
 BLYNK_WRITE(V8) { // Yoshi
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D0, HIGH);
     digitalWrite(D3, HIGH);
-    game_state = 1;
-    digitalWrite(D0, LOW);
-    digitalWrite(D3, LOW);
+
   }
   else {
     digitalWrite(D0, LOW);
@@ -193,66 +152,175 @@ BLYNK_WRITE(V8) { // Yoshi
 }
 
 BLYNK_WRITE(V9) { // Daisy
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D1, HIGH);
     digitalWrite(D2, HIGH);
-    game_state = 1;
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-  }
+  } 
   else {
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
-  }
+  } 
 }
 
 BLYNK_WRITE(V10) { // Toad
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D1, HIGH);
     digitalWrite(D3, HIGH);
-    game_state = 1;
-    digitalWrite(D1, LOW);
-    digitalWrite(D3, LOW);
   }
+  
   else {
     digitalWrite(D1, LOW);
     digitalWrite(D3, LOW);
   }
+  
 }
 
 BLYNK_WRITE(V11) { // Donkey Kong
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D2, HIGH);
     digitalWrite(D3, HIGH);
-    game_state = 1;
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, LOW);
   }
+  
   else {
     digitalWrite(D2, LOW);
     digitalWrite(D3, LOW);
   }
+  
 }
 
 BLYNK_WRITE(V12) { // Random
-  if (param.asInt() == 1) {
+  if (param.asInt() == 1 && game_state == 0) {
     digitalWrite(D0, HIGH);
     digitalWrite(D1, HIGH);
     digitalWrite(D2, HIGH);
     digitalWrite(D3, HIGH);
-    game_state = 1;
-    digitalWrite(D0, LOW);
-    digitalWrite(D1, LOW);
-    digitalWrite(D2, LOW);
-    digitalWrite(D3, LOW);
   }
+  
   else {
     digitalWrite(D0, LOW);
     digitalWrite(D1, LOW);
     digitalWrite(D2, LOW);
     digitalWrite(D3, LOW);
   }
+  
 }
+
+BLYNK_WRITE(V13) {
+  if (param.asInt() == 1 && game_state == 0) {
+   digitalWrite(D5, HIGH);
+   digitalWrite(D0, LOW);
+   digitalWrite(D1, LOW);
+   digitalWrite(D2, LOW);
+   digitalWrite(D3, LOW);
+   game_state = 1;
+  }
+  else {
+  digitalWrite(D5, LOW);
+  game_state = 0;
+  }
+}
+
+BLYNK_WRITE(V0) {
+  int x = param[0].asInt();
+  int y = param[1].asInt();
+  if (x <= 75 && game_state == 1) {
+    Serial.println("Got Here");
+    digitalWrite(D0, HIGH);
+    digitalWrite(D1,LOW);
+  }
+  else if (x >= 175 && game_state == 1) {
+    digitalWrite(D1, HIGH);
+    digitalWrite(D0,LOW);
+  }
+  else {
+    digitalWrite(D1, LOW);
+    digitalWrite(D0,LOW);
+  }
+
+  if (y >= 150 && game_state == 1) {
+    digitalWrite(D2, HIGH);
+  }
+  else {
+    digitalWrite(D2, LOW);
+  }
+}
+
+BLYNK_WRITE(V1) {
+  
+  if (param.asInt() == 1 && game_state == 1) {
+    digitalWrite(D3, HIGH);
+  }
+  else {
+    digitalWrite(D3, LOW);
+  }
+}
+BLYNK_WRITE(V14) {
+  if(param.asInt() == 1 && game_state == 1) {
+    digitalWrite(D6, HIGH);
+    lcd.clear();
+    sprintf(item, "");
+    high_total = 0;
+    start_seq = 0;
+    total = 0;
+    wave_counter = 0;
+  }
+  else {
+    digitalWrite(D6, LOW);
+  }
+}
+
+void item_display() {
+  //Serial.println(total);
+   Serial.println(high_total);
+ // lcd.print(7, 0, item_label);
+   
+   if (val==1024 && start_seq == 0) {
+    start_seq = 1;
+    total = 0;
+   }
+   if (start_seq == 1) {
+    total++;
+    if (val == 1024) {
+      high_total++;
+      }
+    if (total == 99 && wave_counter == 0) {
+      wave_counter++;
+      high_total = 0;
+      total = 0;
+      lcd.clear();
+    }
+     
+    if (total == 99 && wave_counter > 0) {    
+      if (high_total >= 35 && high_total < 45) {
+        //Serial.println("Banana");
+        sprintf(item, "Banana");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 25 && high_total < 35) {
+        //Serial.println("Star");
+        sprintf(item, "Star");
+        starting_place = 5;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 15 && high_total < 25) {
+        sprintf(item, "Mushroom");
+        starting_place = 3;
+        lcd.print(starting_place, 0, item); 
+      }    
+      total = 0;
+      high_total = 0;  
+    }
+    else {
+      sprintf(item, "");
+      starting_place = 1;
+      lcd.print(starting_place, 0, item);  
+    }
+    
+   }
+  
+ // Blynk.virtualWrite(V15, "Mushroom")
+} 
 
 void setup()
 {
@@ -262,10 +330,39 @@ void setup()
   pinMode(D1, OUTPUT);
   pinMode(D2, OUTPUT);
   pinMode(D3, OUTPUT);
+  pinMode(D5, OUTPUT);
+  pinMode(D6, OUTPUT);
   Blynk.begin(auth, ssid, pass);
 }
-
+/*
+  
+  total++;
+  if (val == 1024) {
+    high_total++;
+  }
+  if (total == 1000) {
+    if (high_total <= 125 && high_total >= 75) {
+      Serial.println("Mushroom");
+    }
+    if (high_total <= 175 && high_total >= 225) {
+      Serial.println("Banana");
+    }
+    if (high_total <= 275 && high_total >= 325) {
+      Serial.println("Star");
+    }
+    total = 0;
+    high_total = 0;
+  }
+  Blynk.virtualWrite(V15, "Mushroom")
+} */
 void loop()
 {
+  val = analogRead(A0);
+ // total++;
   Blynk.run();
+  //Serial.println(val);
+  item_display();
+  //if(val == 1024) {
+   // high_total++;
+  //}
 }
