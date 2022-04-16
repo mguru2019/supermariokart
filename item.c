@@ -10,21 +10,18 @@
 #include "LED.h"
 #include "character.h"
 
-tire* back_left;
-tire* back_right;
-tire* front_left;
-tire* front_right;
-
 int choose_item(void) {
 	
 	if (!has_item) {
-		int item = rand() % 3 + 1;
+		int i = rand() % 3 + 1;
 		has_item = 1;
-		return item;
+		dc_item = i * 10 + 10;
+		return i;
 	}
 	return 0;
 
 }
+
 
 void deploy_item(int item, tire* fr, tire* br, tire* fl, tire* bl) {
 	if (has_item == 1) {
@@ -47,7 +44,7 @@ void deploy_item(int item, tire* fr, tire* br, tire* fl, tire* bl) {
 			light_led(user_character);
 		}
 		has_item = 0;
+		dc_item = 0;
 	}
 
 }
-
