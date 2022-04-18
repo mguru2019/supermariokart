@@ -4,5 +4,15 @@ The following instructions are for Hokuyo UTM-30LX. Ensure ROS is installed on U
 + cd to your catkin workspace and connect to source
 + Ensure that ROS can detect the device by running ```rosrun urg_node getID /dev/ttyACMx```. If not, make sure the laser is detected in the USB port by running ```lsusb```
 + Start ROS by running ```roscore```
-+ In a new tab, run ```rosrun urg_node urg_node```
++ In a new tab, run ```rosrun urg_node urg_node _serial_port:=/dev/ttyACMx```
 + Finally, in another tab, run ```rostopic echo /scan```. You should be able to see LiDAR data being sent to the scan topic.
+## 2. Ensure Ubuntu can locate Arduino
++ Run ```lsusb```. If you can see the Arduino listed, you're all set! If not, run the following: 
++ ```sudo groupadd vboxusers```
++ ```sudo usermod -a -G vboxusers $USER```
++ ```sudo reboot```
+## 3. Run Arduino sketch to read from rostopic
++ Compile and upload the Arduino sketch with the subscriber node
++ In terminal, run ```roscore```
++ In a new tab, connect to source and run ```rosrun rosserial_python serial_node.py /dev/ttyACMx```
++ If data is being sent to the channel the Arduino is subscribed to, it should be able to detect it now
