@@ -1,0 +1,99 @@
+/*
+ * communication.c
+ *
+ * Created: 4/21/2022 4:36:47 PM
+ *  Author: kasoo
+ */ 
+
+#include "communication.h"
+#include "item.h"
+
+void comm_init() {
+	// Communication Input Pins
+	DDRK &= ~(DDK0);
+	DDRK &= ~(DDK1);
+	DDRK &= ~(DDK2);
+	
+	// Communication Output Pins
+	DDRK |= (1<<DDK3);
+	DDRK |= (1<<DDK4);
+	DDRK |= (1<<DDK5);
+	
+	PORTK &= ~(1<<PK3);
+	PORTK &= ~(1<<PK4);
+	PORTK &= ~(1<<PK5);	
+}
+
+void ready_to_transmit(void) {
+	PORTK |= (1<<PK3);
+	PORTK |= (1<<PK4);
+	PORTK |= (1<<PK5);
+	
+}
+
+void send_item(int item) {
+	if (item == BULLET) {
+		PORTK |= (1<<PK3);
+		PORTK &= ~(1<<PK4);
+		PORTK &= ~(1<<PK5);
+	}
+	
+	if (item == REDSHELL) {
+		PORTK |= (1<<PK4);
+		PORTK &= ~(1<<PK3);
+		PORTK &= ~(1<<PK5);
+	}
+	
+	if (item == GREENSHELL) {
+		PORTK |= (1<<PK5);
+		PORTK &= ~(1<<PK3);
+		PORTK &= ~(1<<PK5);
+	}
+	
+	if (item == LIGHTNING) {
+		PORTK |= (1<<PK3);
+		PORTK |= (1<<PK4);
+		PORTK &= ~(1<<PK5);
+	}
+	
+	if (item == POW) {
+		PORTK |= (1<<PK3);
+		PORTK &= ~(1<<PK4);
+		PORTK |= (1<<PK5);
+	}
+	
+	if (item == BLUESHELL) {
+		PORTK &= ~(1<<PK3);
+		PORTK |= (1<<PK4);
+		PORTK |= (1<<PK5);
+	}
+}
+
+void item_sent() {
+	PORTK &= ~(1<<PK3);
+	PORTK &= ~(1<<PK4);
+	PORTK &= ~(1<<PK5);
+}
+
+int receive_item_comm(void) {
+	int received_item;
+	if ((PINK & (1<<PINK0)) && ~(PINK & (1<<PINK1)) && ~(PINK & (1<<PINK2))) {
+		received_item = BULLET;
+	}
+	else if (~(PINK & (1<<PINK0)) && (PINK & (1<<PINK1)) && ~(PINK & (1<<PINK2))) {
+		received_item = REDSHELL;
+	}
+	else if (~(PINK & (1<<PINK0)) && ~(PINK & (1<<PINK1)) && (PINK & (1<<PINK2))) {
+		received_item = GREENSHELL;
+	}
+	else if ((PINK & (1<<PINK0)) && (PINK & (1<<PINK1)) && ~(PINK & (1<<PINK2))) {
+		received_item = LIGHTNING;
+	}
+	else if ((PINK & (1<<PINK0)) && ~(PINK & (1<<PINK1)) && (PINK & (1<<PINK2))) {
+		received_item = POW;
+	}
+	else if (~(PINK & (1<<PINK0)) && (PINK & (1<<PINK1)) && (PINK & (1<<PINK2))) {
+		received_item = BLUESHELL;
+	}
+	return received_item;
+}
