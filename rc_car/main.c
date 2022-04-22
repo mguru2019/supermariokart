@@ -14,13 +14,17 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/interrupt.h>
+#include <time.h>
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "car.h"
 #include "item.h"
-#include <stdlib.h>
 #include "uart.h"
-#include <stdio.h>
 #include "LED.h"
 #include "character.h"
+#include "communication.h"
+
 
 char String[25];
 int flag = 0;
@@ -202,6 +206,11 @@ void Initialize(void) {
 	init_led();
 	
 	user_character = 0;
+	
+	//v2v
+	
+	comm_init();
+	
 	sei();
 	
 }
@@ -241,10 +250,14 @@ int main(void)
 
 	back_right = malloc(sizeof(*back_right));
 	init_tire(back_right, 1, PB5, PL3, PL2, 0);
-	
-	//user_character = choose_character();
+	int received_item;
 	while(1) {
+		//deploy_item(LIGHTNING,front_right, back_right, front_left, back_left);
 		
+		//send_item(REDSHELL);
+		//received_item = receive_item_comm();
+		//receive_item(received_item, front_right, back_right, front_left, back_left);
+	
 		if (game_state == 0) { 
 		choose_character();	
 		light_led(selected_character);
@@ -253,6 +266,8 @@ int main(void)
 		
 		else if (game_state == 1) { 
 			light_led(user_character);
+			received_item = receive_item_comm();
+			receive_item(received_item, front_right, back_right, front_left, back_left);
 			
 			if (ADC > 900 && has_item == 0) {
 				item = choose_item();
@@ -304,6 +319,6 @@ int main(void)
 				init_dc();
 				stop(front_right, back_right, front_left, back_left);
 			}
-		}
+		} 
 	} 
 }
