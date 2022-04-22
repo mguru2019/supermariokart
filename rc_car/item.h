@@ -1,6 +1,14 @@
 /*
  * item.h
  *
+ * Created: 4/21/2022 3:07:02 PM
+ *  Author: kasoo
+ */ 
+
+
+/*
+ * item.h
+ *
  * Created: 4/6/2022 2:39:38 PM
  *  Author: mayaguru
  */ 
@@ -30,6 +38,7 @@ int item;
 
 int choose_item(void);
 void deploy_item(int item, tire* fr, tire* br, tire* fl, tire* bl);
+void receive_item(int item, tire* fr, tire* br, tire* fl, tire* bl);
 
 
 
