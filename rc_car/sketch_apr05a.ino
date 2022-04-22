@@ -291,6 +291,42 @@ void item_display() {
     }
      
     if (total == 99 && wave_counter > 0) {    
+      if (high_total >= 95 && high_total <= 100) {
+        //Serial.println("Banana");
+        sprintf(item, "Blue Shell");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 85 && high_total < 95) {
+        //Serial.println("Banana");
+        sprintf(item, "Pow");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 75 && high_total < 85) {
+        //Serial.println("Banana");
+        sprintf(item, "Lightning");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 65 && high_total < 75) {
+        //Serial.println("Banana");
+        sprintf(item, "Green Shell");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 55 && high_total < 65) {
+        //Serial.println("Banana");
+        sprintf(item, "Red Shell");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
+      if (high_total >= 45 && high_total < 55) {
+        //Serial.println("Banana");
+        sprintf(item, "Bullet");
+        starting_place = 4;
+        lcd.print(starting_place, 0, item); 
+      }
       if (high_total >= 35 && high_total < 45) {
         //Serial.println("Banana");
         sprintf(item, "Banana");
