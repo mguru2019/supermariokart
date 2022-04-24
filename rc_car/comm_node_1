@@ -2,7 +2,7 @@
 /*
 * Getting Started example sketch for nRF24L01+ radios
 * This is a very basic example of how to send data from one node to another
-* Updated: Dec 2014 by TMRh20
+* Adapted from RF24.h library
 */
 
 #include <SPI.h>
@@ -12,7 +12,7 @@
 /***      Set this radio as radio number 0 or 1         ***/
 bool radioNumber = 1;
 
-/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 7 & 8 */
+/* Hardware configuration: Set up nRF24L01 radio on SPI bus plus pins 6 & 7 */
 RF24 radio(6,7);
 /**********************************************************/
 
@@ -41,26 +41,20 @@ void setup() {
   
   radio.begin();
 
-  // Set the PA Level low to prevent power supply related issues since this is a
- // getting_started sketch, and the likelihood of close proximity of the devices. RF24_PA_MAX is default.
   radio.setPALevel(RF24_PA_LOW);
 
-    // Set the speed of the transmission to the quickest available
   radio.setDataRate(RF24_2MBPS);
 
-  // Use a channel unlikely to be used by Wifi, Microwave ovens etc
   radio.setChannel(124);
   
-  // Open a writing and reading pipe on each radio, with opposite addresses
   if(radioNumber){
     radio.openWritingPipe(addresses[0]);
     radio.openReadingPipe(1,addresses[1]);
-  }else{
+  } else{
     radio.openWritingPipe(addresses[1]);
     radio.openReadingPipe(1,addresses[0]);
   }
   
-  // Start the radio listening for data
   radio.startListening();
 }
 
@@ -70,7 +64,7 @@ void loop() {
 /****************** Ping Out Role ***************************/  
   if (role == 1)  {
     
-    radio.stopListening();                                    // First, stop listening so we can talk
+    radio.stopListening();                                    
     Serial.println(F("Now sending"));
   
     unsigned int data = 0;
@@ -101,19 +95,19 @@ void loop() {
        Serial.println(F("failed"));
      }
         
-    radio.startListening();                                    // Now, continue listening
+    radio.startListening();                                    
     
-    unsigned long started_waiting_at = micros();               // Set up a timeout period, get the current microseconds
-    boolean timeout = false;                                   // Set up a variable to indicate if a response was received or not
+    unsigned long started_waiting_at = micros();               
+    boolean timeout = false;                                   
     
-    while ( ! radio.available() ){                             // While nothing is received
-      if (micros() - started_waiting_at > 200000 ){            // If waited longer than 200ms, indicate timeout and exit while loop
+    while ( ! radio.available() ){                             
+      if (micros() - started_waiting_at > 200000 ){            
           timeout = true;
           break;
       }      
     }
         
-    if ( timeout ){                                             // Describe the results
+    if ( timeout ){                                             
         Serial.println(F("Failed, response timed out."));
     }else{
      
@@ -149,14 +143,14 @@ void loop() {
     unsigned int got_data;
     
     if( radio.available()){
-                                                                    // Variable for the received timestamp
-      while (radio.available()) {                                   // While there is data ready
-        radio.read( &got_data, sizeof(unsigned int) );             // Get the payload
+                                                                    
+      while (radio.available()) {                                  
+        radio.read( &got_data, sizeof(unsigned int) );            
       }
      
-      radio.stopListening();                                        // First, stop listening so we can talk   
-      radio.write( &got_data, sizeof(unsigned int) );              // Send the final one back.      
-      radio.startListening();                                       // Now, resume listening so we catch the next packets.     
+      radio.stopListening();                                       
+      radio.write( &got_data, sizeof(unsigned int) );               
+      radio.startListening();                                         
       Serial.print(F("Sent response "));
       Serial.println(got_data);  
    }
