@@ -15,7 +15,11 @@ The following instructions are for Hokuyo UTM-30LX. Ensure ROS is installed on U
 + ```sudo groupadd vboxusers```
 + ```sudo usermod -a -G vboxusers $USER```
 + ```sudo reboot```
-## 3. Run Arduino sketch to read from rostopic
+## 3. Run follow_the_gap node
++ First, compile your catkin_ws in its root directory by running catkin_make. Makefile is provided in this repository
++ Then, connect to source and run ```rosrun follow_the_gap reactive_gap_follow```
++ In a new terminal, if you connect to source again and run ```rostopic echo nav``` you should see the stream printing steering angle data.
+## 4. Run Arduino sketch to read from rostopic
 + Compile and upload the Arduino sketch with the subscriber node
 + In terminal, run ```roscore```
 + In a new tab, connect to source and run ```rosrun rosserial_python serial_node.py /dev/ttyACMx```
