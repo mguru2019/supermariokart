@@ -1,9 +1,13 @@
+This repository contains main execution files for each of the ROS nodes in the autonomous car setup. All include files for the car are within the RC car directory, since the only file that differs is main.c
+
+This project was done entirely in Ubuntu OS 20.04 with ROS Noetic, however any distribution will work as long as the urg_node and rosserial_arduino packages can be installed.
+
 ## 1. Read LiDAR Scans 
 The following instructions are for Hokuyo UTM-30LX. Ensure ROS is installed on Ubuntu with the urg_node package.
 + Ensure rw permissions are enabled for your device by running ```ls -l /dev/ttyACMx``` where x is the device number (default is 0). If not, run ```sudo chmod a+rw /dev/ttyACMx```
 + cd to your catkin workspace and connect to source
 + Ensure that ROS can detect the device by running ```rosrun urg_node getID /dev/ttyACMx```. If not, make sure the laser is detected in the USB port by running ```lsusb```
-+ Start ROS by running ```roscore```
++ Start ROS master node by running ```roscore```
 + In a new tab, run ```rosrun urg_node urg_node _serial_port:=/dev/ttyACMx```
 + Finally, in another tab, run ```rostopic echo /scan```. You should be able to see LiDAR data being sent to the scan topic.
 ## 2. Ensure Ubuntu can locate Arduino
