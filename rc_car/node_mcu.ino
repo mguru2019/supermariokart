@@ -370,27 +370,7 @@ void setup()
   pinMode(D6, OUTPUT);
   Blynk.begin(auth, ssid, pass);
 }
-/*
-  
-  total++;
-  if (val == 1024) {
-    high_total++;
-  }
-  if (total == 1000) {
-    if (high_total <= 125 && high_total >= 75) {
-      Serial.println("Mushroom");
-    }
-    if (high_total <= 175 && high_total >= 225) {
-      Serial.println("Banana");
-    }
-    if (high_total <= 275 && high_total >= 325) {
-      Serial.println("Star");
-    }
-    total = 0;
-    high_total = 0;
-  }
-  Blynk.virtualWrite(V15, "Mushroom")
-} */
+
 void loop()
 {
   val = analogRead(A0);
